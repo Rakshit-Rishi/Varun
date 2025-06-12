@@ -67,6 +67,161 @@
             --shadow-glow: 0 0 25px rgba(99, 102, 241, 0.6);
         }
 
+        /* LOADING SCREEN STYLES */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+
+        .loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loading-logo {
+            font-size: 4rem;
+            font-weight: 900;
+            color: white;
+            margin-bottom: 2rem;
+            animation: logoGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes logoGlow {
+            0% {
+                text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+                transform: scale(1);
+            }
+            100% {
+                text-shadow: 0 0 40px rgba(255, 255, 255, 0.8), 0 0 60px rgba(255, 255, 255, 0.6);
+                transform: scale(1.05);
+            }
+        }
+
+        .loading-spinner {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            margin-bottom: 2rem;
+        }
+
+        .loading-ring {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 4px solid transparent;
+            border-top: 4px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .loading-ring:nth-child(2) {
+            width: 60px;
+            height: 60px;
+            top: 10px;
+            left: 10px;
+            border-top-color: rgba(255, 255, 255, 0.7);
+            animation-duration: 1.5s;
+            animation-direction: reverse;
+        }
+
+        .loading-ring:nth-child(3) {
+            width: 40px;
+            height: 40px;
+            top: 20px;
+            left: 20px;
+            border-top-color: rgba(255, 255, 255, 0.5);
+            animation-duration: 2s;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            animation: fadeInOut 2s ease-in-out infinite;
+        }
+
+        .loading-progress {
+            width: 300px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .loading-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #fff, rgba(255, 255, 255, 0.8));
+            border-radius: 2px;
+            width: 0%;
+            animation: loadingProgress 3s ease-in-out forwards;
+        }
+
+        @keyframes loadingProgress {
+            0% { width: 0%; }
+            20% { width: 30%; }
+            50% { width: 60%; }
+            80% { width: 85%; }
+            100% { width: 100%; }
+        }
+
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+
+        .loading-particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: particleFloat 4s linear infinite;
+        }
+
+        @keyframes particleFloat {
+            0% {
+                transform: translateY(100vh) translateX(0) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+                transform: translateY(90vh) translateX(10px) scale(1);
+            }
+            90% {
+                opacity: 0.6;
+                transform: translateY(10vh) translateX(-10px) scale(1);
+            }
+            100% {
+                transform: translateY(0) translateX(0) scale(0);
+                opacity: 0;
+            }
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -1392,7 +1547,47 @@
             display: flex;
             flex-wrap: wrap;
             gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .project-buttons {
+            display: flex;
+            gap: 1rem;
             margin-top: auto;
+        }
+
+        .project-btn {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius-lg);
+            text-decoration: none;
+            font-weight: 600;
+            text-align: center;
+            transition: all var(--transition-bounce);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .project-btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        .project-btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .project-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .project-btn-primary:hover {
+            box-shadow: var(--shadow-glow);
         }
 
         /* GLOWING TECH TAGS - Like the reference image */
@@ -1605,6 +1800,7 @@
             background: var(--bg-tertiary);
             border-radius: var(--radius-xl);
             transition: all var(--transition-normal);
+            cursor: pointer;
         }
 
         .contact-item:hover {
@@ -1905,6 +2101,21 @@
     </style>
 </head>
 <body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-particles" id="loadingParticles"></div>
+        <div class="loading-logo">VK</div>
+        <div class="loading-spinner">
+            <div class="loading-ring"></div>
+            <div class="loading-ring"></div>
+            <div class="loading-ring"></div>
+        </div>
+        <div class="loading-text">Loading Portfolio...</div>
+        <div class="loading-progress">
+            <div class="loading-progress-bar"></div>
+        </div>
+    </div>
+
     <!-- Scroll Progress Bar -->
     <div class="scroll-progress"></div>
 
@@ -1938,7 +2149,7 @@
         </div>
     </nav>
 
-    <!-- Hero Section - KEPT AS IS -->
+    <!-- Hero Section -->
     <section id="home" class="hero">
         <div class="hero-bg">
             <div class="hero-bg-gradient"></div>
@@ -2048,7 +2259,7 @@
         </div>
     </section>
 
-    <!-- NEW MODERN Skills Section -->
+    <!-- Skills Section -->
     <section id="skills" class="skills">
         <div class="container">
             <div class="section-header scroll-reveal">
@@ -2101,7 +2312,6 @@
                         <h3><i class="fas fa-brain"></i> AI & Machine Learning</h3>
                         <div class="skill-tags">
                             <div class="skill-tag"><span>Prompt Engineering</span></div>
-                            <div class="skill-tag"><span>LangChain</span></div>
                             <div class="skill-tag"><span>Hugging Face</span></div>
                             <div class="skill-tag"><span>RAG Systems</span></div>
                             <div class="skill-tag"><span>LLM Integration</span></div>
@@ -2115,7 +2325,7 @@
                             <div class="skill-tag"><span>JavaScript</span></div>
                             <div class="skill-tag"><span>Java</span></div>
                             <div class="skill-tag"><span>C</span></div>
-                            <div class="skill-tag"><span>TypeScript</span></div>
+                            <div class="skill-tag"><span>React</span></div>
                         </div>
                     </div>
                     <div class="skill-category-modern">
@@ -2124,7 +2334,6 @@
                             <div class="skill-tag"><span>React</span></div>
                             <div class="skill-tag"><span>HTML/CSS</span></div>
                             <div class="skill-tag"><span>Streamlit</span></div>
-                            <div class="skill-tag"><span>Node.js</span></div>
                             <div class="skill-tag"><span>Responsive Design</span></div>
                         </div>
                     </div>
@@ -2162,10 +2371,7 @@
                         </div>
                         <div class="project-overlay">
                             <div class="project-links">
-                                <a href="#" class="project-link" aria-label="View GitHub Repository">
-                                    <i class="fab fa-github"></i>
-                                </a>
-                                <a href="#" class="project-link" aria-label="View Live Demo">
+                                <a href="vidyamitr.com" class="project-link" aria-label="View Live Demo">
                                     <i class="fas fa-external-link-alt"></i>
                                 </a>
                             </div>
@@ -2174,17 +2380,57 @@
                     <div class="project-content">
                         <h3 class="project-title">VIDYAMITR Educational Platform</h3>
                         <p class="project-description">
-                            Comprehensive educational website with interactive learning modules, LLM-powered tutoring, 
-                            and personalized study resources. Built in 10 hours with cutting-edge AI integration.
+                            Comprehensive educational website with interactive learning modules, 
+                            and personalized study resources. Built in 8 hours with cutting-edge AI integration.
                         </p>
                         <div class="project-tech">
                             <span class="tech-tag">React</span>
-                            <span class="tech-tag">LLM</span>
-                            <span class="tech-tag">AI Tutoring</span>
-                            <span class="tech-tag">Node.js</span>
+                            <span class="tech-tag">Tailwind css</span>
+                            <span class="tech-tag">Tutoring</span>
+                            <span class="tech-tag">Supabase</span>
+                            <span class="tech-tag">Freelaning</span>
+                        </div>
+                        <div class="project-buttons">
+                            <a href="vidyamitr.com" class="project-btn project-btn-primary" target="_blank">
+                                <i class="fas fa-external-link-alt"></i>
+                                Website
+                            </a>
                         </div>
                     </div>
                 </div>
+                  <div class="project-card scroll-reveal">
+        <div class="project-image">
+            <div class="project-image-bg">
+                <i class="fas fa-code"></i>
+            </div>
+            <div class="project-overlay">
+                <div class="project-links">
+                    <a href="https://online-compiler-pro.netlify.app/" class="project-link" aria-label="View Live Demo">
+                        <i class="fas fa-external-link-alt"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="project-content">
+            <h3 class="project-title">Online Code Compiler</h3>
+            <p class="project-description">
+                A HackerRank-style platform featuring coding challenges, real-time compilation, and automated testing. Supports multiple programming languages with syntax highlighting and performance metrics.
+            </p>
+            <div class="project-tech">
+                <span class="tech-tag">React</span>
+                <span class="tech-tag">Tailwind CSS</span>
+                <span class="tech-tag">ONE COMPILER API</span>
+                <span class="tech-tag">Supabse</span>
+                <span class="tech-tag">Freelaning</span>
+            </div>
+            <div class="project-buttons">
+                <a href="https://online-compiler-pro.netlify.app/" class="project-btn project-btn-primary" target="_blank">
+                    <i class="fas fa-external-link-alt"></i>
+                    Website
+                </a>
+            </div>
+        </div>
+    </div>
 
                 <div class="project-card scroll-reveal">
                     <div class="project-image">
@@ -2193,12 +2439,10 @@
                         </div>
                         <div class="project-overlay">
                             <div class="project-links">
-                                <a href="#" class="project-link" aria-label="View GitHub Repository">
+                                <a href="https://github.com/Var1035/Research-Summarizer" class="project-link" aria-label="View GitHub Repository">
                                     <i class="fab fa-github"></i>
                                 </a>
-                                <a href="#" class="project-link" aria-label="View Live Demo">
-                                    <i class="fas fa-external-link-alt"></i>
-                                </a>
+                                
                             </div>
                         </div>
                     </div>
@@ -2214,6 +2458,13 @@
                             <span class="tech-tag">NLP</span>
                             <span class="tech-tag">Python</span>
                         </div>
+                        <div class="project-buttons">
+                            
+                            <a href="https://github.com/Var1035/Research-Summarizer" class="project-btn project-btn-secondary" target="_blank">
+                                <i class="fab fa-github"></i>
+                                GitHub
+                            </a>
+                        </div>
                     </div>
                 </div>
 
@@ -2224,10 +2475,10 @@
                         </div>
                         <div class="project-overlay">
                             <div class="project-links">
-                                <a href="#" class="project-link" aria-label="View GitHub Repository">
+                                <a href="https://github.com/Var1035/CHATBOT" class="project-link" aria-label="View GitHub Repository">
                                     <i class="fab fa-github"></i>
                                 </a>
-                                <a href="#" class="project-link" aria-label="View Live Demo">
+                                <a href="https://var1035.github.io/CHATBOT/" class="project-link" aria-label="View Live Demo">
                                     <i class="fas fa-external-link-alt"></i>
                                 </a>
                             </div>
@@ -2245,8 +2496,50 @@
                             <span class="tech-tag">Chatbot</span>
                             <span class="tech-tag">JavaScript</span>
                         </div>
+                        <div class="project-buttons">
+                            <a href="https://var1035.github.io/CHATBOT/" class="project-btn project-btn-primary" target="_blank">
+                                <i class="fas fa-external-link-alt"></i>
+                                Website
+                            </a>
+                            <a href="https://github.com/Var1035/CHATBOT" class="project-btn project-btn-secondary" target="_blank">
+                                <i class="fab fa-github"></i>
+                                GitHub
+                            </a>
+                        </div>
                     </div>
                 </div>
+                 <div class="project-card scroll-reveal">
+        <div class="project-image">
+            <div class="project-image-bg">
+                <i class="fas fa-chart-bar"></i>
+            </div>
+            <div class="project-overlay">
+                <div class="project-links">
+                    <a href="https://github.com/Var1035/cricket-data-analysis" class="project-link" aria-label="View GitHub Repository">
+                        <i class="fab fa-github"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="project-content">
+            <h3 class="project-title">Cricket Data Analysis</h3>
+            <p class="project-description">
+                Comprehensive analysis of cricket match data using Python and data science techniques. Includes player performance metrics, match outcome predictions, and interactive visualizations of historical cricket statistics.
+            </p>
+            <div class="project-tech">
+                <span class="tech-tag">Python</span>
+                <span class="tech-tag">Pandas</span>
+                <span class="tech-tag">Matplotlib</span>
+                <span class="tech-tag">Scikit-learn</span>
+            </div>
+            <div class="project-buttons">
+                <a href="https://github.com/Var1035/CRICKET-DATA-ANLYSIS-AND-SCORE-PRIDICTION" class="project-btn project-btn-secondary" target="_blank">
+                    <i class="fab fa-github"></i>
+                    GitHub
+                </a>
+            </div>
+        </div>
+    </div>
 
                 <div class="project-card scroll-reveal">
                     <div class="project-image">
@@ -2255,12 +2548,10 @@
                         </div>
                         <div class="project-overlay">
                             <div class="project-links">
-                                <a href="#" class="project-link" aria-label="View GitHub Repository">
+                                <a href="https://github.com/Var1035/Wikipedia-Search-" class="project-link" aria-label="View GitHub Repository">
                                     <i class="fab fa-github"></i>
                                 </a>
-                                <a href="#" class="project-link" aria-label="View Live Demo">
-                                    <i class="fas fa-external-link-alt"></i>
-                                </a>
+                                
                             </div>
                         </div>
                     </div>
@@ -2275,6 +2566,12 @@
                             <span class="tech-tag">NLP</span>
                             <span class="tech-tag">Python</span>
                             <span class="tech-tag">API Integration</span>
+                        </div>
+                        <div class="project-buttons">
+                            <a href="https://github.com/Var1035/Wikipedia-Search-" class="project-btn project-btn-secondary" target="_blank">
+                                <i class="fab fa-github"></i>
+                                GitHub
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -2315,18 +2612,6 @@
                     <h4>Google Cloud Certified</h4>
                     <p>Successfully completed "Foundations of Data Science" and "Prompt Engineering for LLMs" certifications with distinction. Demonstrated expertise in cloud-based AI/ML solutions and advanced prompt engineering techniques.</p>
                 </div>
-
-                <div class="achievement-card scroll-reveal">
-                    <div class="achievement-icon-wrapper">
-                        <div class="achievement-icon-bg"></div>
-                        <div class="achievement-icon">
-                            <i class="fas fa-chalkboard-teacher"></i>
-                        </div>
-                    </div>
-                    <h4>Technical Workshop Speaker</h4>
-                    <p>Delivered comprehensive workshop on "Prompt Engineering and AI Tools Integration" at KITS Tech Fest 2024. Trained 100+ students and professionals on cutting-edge AI technologies and practical implementation strategies.</p>
-                </div>
-
                 <div class="achievement-card scroll-reveal">
                     <div class="achievement-icon-wrapper">
                         <div class="achievement-icon-bg"></div>
@@ -2357,7 +2642,7 @@
                         </div>
                     </div>
                     <h4>Team Leadership</h4>
-                    <p>Led a team of 5 developers in creating the VIDYAMITR educational platform. Successfully managed project timeline, coordinated development efforts, and delivered the complete solution within 10 hours.</p>
+                    <p>Led a team of 4 developers in creating the HR Chatbot. Successfully managed project timeline, coordinated development efforts, and delivered the complete solution within 1 day</p>
                 </div>
             </div>
         </div>
@@ -2383,7 +2668,7 @@
                     </p>
                     
                     <div class="contact-details">
-                        <div class="contact-item">
+                        <div class="contact-item" onclick="openWhatsApp()">
                             <div class="contact-icon">
                                 <i class="fas fa-phone"></i>
                             </div>
@@ -2392,13 +2677,13 @@
                                 <p>+91 9392335014</p>
                             </div>
                         </div>
-                        <div class="contact-item">
+                        <div class="contact-item" onclick="openEmail()">
                             <div class="contact-icon">
                                 <i class="fas fa-envelope"></i>
                             </div>
                             <div>
                                 <strong>Email</strong>
-                                <p>r22jr1a4253@gmail.com</p>
+                                <p>varunkumar.potla@gmail.com</p>
                             </div>
                         </div>
                         <div class="contact-item">
@@ -2413,16 +2698,13 @@
                     </div>
 
                     <div class="social-links">
-                        <a href="#" class="social-link" title="GitHub" aria-label="Visit GitHub Profile">
+                        <a href="https://github.com/Var1035" class="social-link" title="GitHub" aria-label="Visit GitHub Profile" target="_blank">
                             <i class="fab fa-github"></i>
                         </a>
-                        <a href="#" class="social-link" title="LinkedIn" aria-label="Visit LinkedIn Profile">
+                        <a href="https://www.linkedin.com/in/varun-kumar-potla-3b2974352" class="social-link" title="LinkedIn" aria-label="Visit LinkedIn Profile" target="_blank">
                             <i class="fab fa-linkedin"></i>
                         </a>
-                        <a href="#" class="social-link" title="Twitter" aria-label="Visit Twitter Profile">
-                            <i class="fab fa-twitter"></i>
-                        </a>
-                        <a href="mailto:r22jr1a4253@gmail.com" class="social-link" title="Send Email" aria-label="Send Email">
+                        <a href="mailto:varunkumar.potla@gmail.com" class="social-link" title="Send Email" aria-label="Send Email">
                             <i class="fas fa-envelope"></i>
                         </a>
                     </div>
@@ -2463,6 +2745,60 @@
     </footer>
 
     <script>
+        // Loading Screen Manager
+        class LoadingScreenManager {
+            constructor() {
+                this.loadingScreen = document.getElementById('loadingScreen');
+                this.loadingParticles = document.getElementById('loadingParticles');
+                this.init();
+            }
+
+            init() {
+                this.createParticles();
+                this.startLoading();
+            }
+
+            createParticles() {
+                for (let i = 0; i < 20; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = 'particle';
+                    particle.style.left = Math.random() * 100 + '%';
+                    particle.style.animationDelay = Math.random() * 4 + 's';
+                    particle.style.animationDuration = (Math.random() * 2 + 3) + 's';
+                    this.loadingParticles.appendChild(particle);
+                }
+            }
+
+            startLoading() {
+                setTimeout(() => {
+                    this.hideLoadingScreen();
+                }, 3500);
+            }
+
+            hideLoadingScreen() {
+                this.loadingScreen.classList.add('hidden');
+                setTimeout(() => {
+                    this.loadingScreen.style.display = 'none';
+                }, 800);
+            }
+        }
+
+        // WhatsApp and Email Integration
+        function openWhatsApp() {
+            const phoneNumber = '+919392335014';
+            const message = encodeURIComponent('Hello Varun! I found your portfolio and would like to connect with you.');
+            const whatsappURL = `https://wa.me/${phoneNumber}?text=${message}`;
+            window.open(whatsappURL, '_blank');
+        }
+
+        function openEmail() {
+            const email = 'varunkumar.potla@gmail.com';
+            const subject = encodeURIComponent('Portfolio Inquiry');
+            const body = encodeURIComponent('Hello Varun,\n\nI came across your portfolio and would like to discuss potential opportunities.\n\nBest regards,');
+            const mailtoURL = `mailto:${email}?subject=${subject}&body=${body}`;
+            window.location.href = mailtoURL;
+        }
+
         // Theme Management
         class ThemeManager {
             constructor() {
@@ -2707,7 +3043,7 @@
             }
         }
 
-        // Form Handler
+        // Enhanced Form Handler with Email Integration
         class FormHandler {
             constructor() {
                 this.form = document.getElementById('contactForm');
@@ -2720,7 +3056,7 @@
                 }
             }
 
-            handleSubmit(e) {
+            async handleSubmit(e) {
                 e.preventDefault();
                 
                 const submitBtn = this.form.querySelector('button[type="submit"]');
@@ -2729,12 +3065,54 @@
                 submitBtn.innerHTML = '<span class="loading"></span> Sending...';
                 submitBtn.disabled = true;
                 
-                setTimeout(() => {
+                // Get form data
+                const formData = new FormData(this.form);
+                const data = {
+                    name: formData.get('name'),
+                    email: formData.get('email'),
+                    subject: formData.get('subject'),
+                    message: formData.get('message')
+                };
+
+                try {
+                    // Send email using EmailJS or similar service
+                    await this.sendEmail(data);
                     this.showNotification('Message sent successfully! I\'ll get back to you soon.', 'success');
                     this.form.reset();
-                    submitBtn.innerHTML = originalHTML;
-                    submitBtn.disabled = false;
-                }, 2000);
+                } catch (error) {
+                    console.error('Error sending email:', error);
+                    this.showNotification('Failed to send message. Please try again or contact me directly.', 'error');
+                }
+                
+                submitBtn.innerHTML = originalHTML;
+                submitBtn.disabled = false;
+            }
+
+            async sendEmail(data) {
+                // Simulate email sending - replace with actual email service
+                return new Promise((resolve) => {
+                    setTimeout(() => {
+                        // In a real implementation, you would integrate with:
+                        // - EmailJS
+                        // - Formspree
+                        // - Netlify Forms
+                        // - Your own backend API
+                        
+                        // For now, we'll create a mailto link as fallback
+                        const subject = encodeURIComponent(`Portfolio Contact: ${data.subject}`);
+                        const body = encodeURIComponent(
+                            `Name: ${data.name}\n` +
+                            `Email: ${data.email}\n` +
+                            `Subject: ${data.subject}\n\n` +
+                            `Message:\n${data.message}`
+                        );
+                        
+                        // Open default email client
+                        window.location.href = `mailto:varunkumar.potla@gmail.com?subject=${subject}&body=${body}`;
+                        
+                        resolve();
+                    }, 2000);
+                });
             }
 
             showNotification(message, type = 'info') {
@@ -2750,7 +3128,9 @@
                     z-index: 10000;
                     transform: translateX(100%);
                     transition: transform 0.3s ease;
-                    background: ${type === 'success' ? 'linear-gradient(135deg, #10b981 0%, #34d399 100%)' : 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)'};
+                    background: ${type === 'success' ? 'linear-gradient(135deg, #10b981 0%, #34d399 100%)' : 
+                                type === 'error' ? 'linear-gradient(135deg, #ef4444 0%, #f87171 100%)' :
+                                'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)'};
                     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
                     max-width: 300px;
                     font-size: 0.9rem;
@@ -2806,6 +3186,7 @@
 
         // Initialize everything when DOM is loaded
         document.addEventListener('DOMContentLoaded', () => {
+            new LoadingScreenManager();
             new ThemeManager();
             new NavigationManager();
             new SparkleManager();
@@ -2832,9 +3213,11 @@
                 }
             });
 
-            console.log('🚀 Ultra-Modern Portfolio Enhanced loaded successfully!');
+            console.log('🚀 Enhanced Portfolio loaded successfully!');
             console.log('💡 Press "T" to toggle theme');
-            console.log('✨ Sparkling animations active on mobile scroll');
+            console.log('📱 WhatsApp integration active');
+            console.log('📧 Email integration active');
+            console.log('✨ Loading screen with animations');
         });
     </script>
 </body>
